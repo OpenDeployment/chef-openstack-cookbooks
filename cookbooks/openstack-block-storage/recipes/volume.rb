@@ -155,37 +155,48 @@ when 'cinder.volume.drivers.ibm.ibmnas.IBMNAS_NFSDriver'
   end
 
 when 'cinder.volume.drivers.lvm.LVMISCSIDriver'
-  if node['openstack']['block-storage']['volume']['create_volume_group']
-    volume_size = node['openstack']['block-storage']['volume']['volume_group_size']
-    seek_count = volume_size.to_i * 1024
+#  if node['openstack']['block-storage']['volume']['create_volume_group']
+#    volume_size = node['openstack']['block-storage']['volume']['volume_group_size']
+#    seek_count = volume_size.to_i * 1024
     # default volume group is 40G
-    seek_count = 40 * 1024 if seek_count == 0
-    vg_name = node['openstack']['block-storage']['volume']['volume_group']
-    vg_file = "#{node['openstack']['block-storage']['volume']['state_path']}/#{vg_name}.img"
+#    seek_count = 40 * 1024 if seek_count == 0
+#    vg_name = node['openstack']['block-storage']['volume']['volume_group']
+#    vg_file = "#{node['openstack']['block-storage']['volume']['state_path']}/#{vg_name}.img"
 
     # create volume group
-    execute 'Create Cinder volume group' do
-      command "dd if=/dev/zero of=#{vg_file} bs=1M seek=#{seek_count} count=0; vgcreate #{vg_name} $(losetup --show -f #{vg_file})"
-      action :run
-      not_if "vgs #{vg_name}"
+#    execute 'Create Cinder volume group' do
+#      command "dd if=/dev/zero of=#{vg_file} bs=1M seek=#{seek_count} count=0; vgcreate #{vg_name} $(losetup --show -f #{vg_file})"
+#      action :run
+#      not_if "vgs #{vg_name}"
+#    end
+
+#    template '/etc/init.d/cinder-group-active' do
+#      source 'cinder-group-active.erb'
+#      mode '755'
+#      variables(
+#        volume_name: vg_name,
+#        volume_file: vg_file
+#      )
+#      notifies :start, 'service[cinder-group-active]', :immediately
+#    end
+
+#    service 'cinder-group-active' do
+#      service_name 'cinder-group-active'
+
+#      action [:enable, :start]
+#    end
+
+    package 'bc' do
+      action :upgrade
     end
 
-    template '/etc/init.d/cinder-group-active' do
-      source 'cinder-group-active.erb'
-      mode '755'
-      variables(
-        volume_name: vg_name,
-        volume_file: vg_file
-      )
-      notifies :start, 'service[cinder-group-active]', :immediately
+    openstack_block_storage_volume node['openstack']['block-storage']['volume']['disk'] do
+      action :create_partition
     end
 
-    service 'cinder-group-active' do
-      service_name 'cinder-group-active'
-
-      action [:enable, :start]
+    openstack_block_storage_volume node['openstack']['block-storage']['volume']['disk'] do
+      action :mk_cinder_vol
     end
-  end
 
 when 'cinder.volume.drivers.emc.emc_smis_iscsi.EMCSMISISCSIDriver'
   platform_options['cinder_emc_packages'].each do |pkg|

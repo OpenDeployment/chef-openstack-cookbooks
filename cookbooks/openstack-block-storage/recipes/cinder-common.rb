@@ -40,9 +40,15 @@ if mq_service_type == 'rabbitmq'
   if node['openstack']['mq']['block-storage']['rabbit']['ha']
     rabbit_hosts = rabbit_servers
   end
-  mq_password = get_password 'user', node['openstack']['mq']['block-storage']['rabbit']['userid']
+  #mq_password = get_password 'user', node['openstack']['mq']['block-storage']['rabbit']['userid']
+  mq_password = get_password('user', \
+                  node['openstack']['mq']['user'], \
+                  node['openstack']['mq']['password'])
 elsif mq_service_type == 'qpid'
-  mq_password = get_password 'user', node['openstack']['mq']['block-storage']['qpid']['username']
+  #mq_password = get_password 'user', node['openstack']['mq']['block-storage']['qpid']['username']
+  mq_password = get_password('user', \
+                  node['openstack']['mq']['user'], \
+                  node['openstack']['mq']['password'])
 end
 
 case node['openstack']['block-storage']['volume']['driver']

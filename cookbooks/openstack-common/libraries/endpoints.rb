@@ -29,6 +29,7 @@ module ::Openstack # rubocop:disable Documentation
   # constructed from the endpoint parts in the endpoint hash, and returned
   def endpoint(name)
     ep = endpoint_for(name)
+    print "\n++++++++name=#{name}, ep=#{ep}+++++++++++++\n" if name.eql?('image-api-bind')
     uri_from_hash(ep) if ep
   end
 

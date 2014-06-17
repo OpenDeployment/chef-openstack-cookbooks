@@ -107,6 +107,9 @@
           "port": "8774",
           "path": "/v2/%(tenant_id)s"
         },
+        "compute-api-bind": {
+          "bind_interface": "eth0"
+        },
         "compute-ec2-admin": {
           "host": "10.145.88.152",
           "scheme": "http",
@@ -131,17 +134,29 @@
           "port": "6080",
           "path": "/vnc_auto.html"
         },
+        "compute-novnc-bind": {
+          "bind_interface": "eth0"
+        },
+        "vnc_bind": {
+          "bind_interface": "eth0"
+        },
         "image-api": {
           "host": "10.145.88.152",
           "scheme": "http",
           "port": "9292",
           "path": "/v2"
         },
+        "image-api-bind": {
+          "bind_interface": "eth0"
+        },
         "image-registry": {
           "host": "10.145.88.152",
           "scheme": "http",
           "port": "9191",
           "path": "/v2"
+        },
+        "image-registry-bind": {
+          "bind_interface": "eth0"
         },
         "identity-bind": {
           "bind_interface": "eth0"
@@ -163,6 +178,9 @@
           "scheme": "http",
           "port": "8776",
           "path": "/v1/%(tenant_id)s"
+        },
+        "block-storage-api-bind": {
+          "bind_interface": "eth0"
         },
         "telemetry-api": {
           "host": "10.145.88.152",
@@ -193,7 +211,7 @@
         "admin_user": "ksadmin",
         "bind_interface": "eth0",
         "catalog": {
-          "backend": "templated"
+          "backend": "sql"
         },
         "debug": true,
         "rabbit_server_chef_role": "os-ops-messaging",
@@ -214,7 +232,7 @@
           "demo"
         ],
         "token": {
-          "backend": "memcache"
+          "backend": "sql"
         },
         "users": {
           "ksadmin": {
@@ -263,7 +281,7 @@
           "use": false
         },
         "upload_image": {
-          "cirros": "http://hypnotoad/cirros-0.3.0-x86_64-disk.img"
+          "cirros": "http://download.cirros-cloud.net/0.3.2/cirros-0.3.2-x86_64-disk.img"
         },
         "upload_images": [
           "cirros"
@@ -274,6 +292,7 @@
       ],
       "mq": {
         "user": "guest",
+        "password": "test",
         "vhost": "/nova"
       }
     }

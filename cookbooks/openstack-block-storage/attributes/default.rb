@@ -208,7 +208,8 @@ default['openstack']['block-storage']['volume']['volume_group'] = 'cinder-volume
 default['openstack']['block-storage']['volume']['volume_group_size'] = 40
 default['openstack']['block-storage']['volume']['volume_clear_size'] = 0
 default['openstack']['block-storage']['volume']['volume_clear'] = 'zero'
-
+# volume disk can be loopfile or /dev/sdb
+default['openstack']['block-storage']['volume']['disk'] = 'loopfile'
 default['openstack']['block-storage']['volume']['create_volume_group'] = false
 default['openstack']['block-storage']['volume']['iscsi_helper'] = 'tgtadm'
 default['openstack']['block-storage']['volume']['iscsi_ip_address'] = node['ipaddress']

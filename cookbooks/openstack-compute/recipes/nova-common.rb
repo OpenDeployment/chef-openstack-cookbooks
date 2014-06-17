@@ -67,9 +67,12 @@ mq_service_type = node['openstack']['mq']['compute']['service_type']
 
 if mq_service_type == 'rabbitmq'
   node['openstack']['mq']['compute']['rabbit']['ha'] && (rabbit_hosts = rabbit_servers)
-  mq_password = get_password 'user', node['openstack']['mq']['compute']['rabbit']['userid']
+  mq_password = get_password('user', \
+                  node['openstack']['mq']['user'], \
+                  node['openstack']['mq']['password'])
 elsif mq_service_type == 'qpid'
-  mq_password = get_password 'user', node['openstack']['mq']['compute']['qpid']['username']
+  mq_password = get_password('user', \
+                  node['openstack']['mq']['compute']['qpid']['username'])
 end
 
 memcache_servers = memcached_servers.join ','

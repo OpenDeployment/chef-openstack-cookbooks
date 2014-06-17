@@ -119,7 +119,9 @@ sql_connection = db_uri('image', db_user, db_pass)
 mq_service_type = node['openstack']['mq']['image']['service_type']
 
 if mq_service_type == 'rabbitmq'
-  mq_password = get_password 'user', node['openstack']['mq']['image']['rabbit']['userid']
+  mq_password = get_password('user', \
+                  node['openstack']['mq']['user'], \
+                  node['openstack']['mq']['password'])
 elsif mq_service_type == 'qpid'
   mq_password = get_password 'user', node['openstack']['mq']['image']['qpid']['username']
 end

@@ -108,7 +108,9 @@ mq_service_type = node['openstack']['mq']['network']['service_type']
 
 if mq_service_type == 'rabbitmq'
   rabbit_hosts = rabbit_servers if node['openstack']['mq']['network']['rabbit']['ha']
-  mq_password = get_password 'user', node['openstack']['mq']['network']['rabbit']['userid']
+  mq_password = get_password 'user', \
+                node['openstack']['mq']['user'], \
+                node['openstack']['mq']['password']
 elsif mq_service_type == 'qpid'
   mq_password = get_password 'user', node['openstack']['mq']['network']['qpid']['username']
 end

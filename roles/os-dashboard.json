@@ -8,6 +8,7 @@
   },
   "chef_type": "role",
   "run_list": [
+    "recipe[memcached]",
     "role[os-base]",
     "recipe[openstack-dashboard::server]"
   ],

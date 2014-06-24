@@ -60,11 +60,14 @@
           }
         },
         "network": {
+          "service_type": "neutron",
           "fixed_range": "10.0.0.0/8"
-        },
-        "networks": [
-
-        ]
+        }
+      },
+      "network": {
+        "ml2": {
+          "type_drivers": "local,flat,vlan,gre"
+        }
       },
       "db": {
         "bind_interface": "eth0",
@@ -173,7 +176,7 @@
           "port": "35357",
           "path": "/v2.0"
         },
-        "volume-api": {
+        "block-storage-api": {
           "host": "10.145.88.152",
           "scheme": "http",
           "port": "8776",
@@ -192,7 +195,13 @@
           "host": "10.145.88.152",
           "scheme": "http",
           "port": "9696",
-          "path": "/v2"
+          "path": ""
+        },
+        "network-api-bind": {
+          "bind_interface": "eth0"
+        },
+        "network-openvswitch": {
+          "bind_interface": "eth0"
         },
         "orchestration-api": {
           "host": "10.145.88.152",
@@ -208,7 +217,7 @@
         }
       },
       "identity": {
-        "admin_user": "ksadmin",
+        "admin_user": "admin",
         "bind_interface": "eth0",
         "catalog": {
           "backend": "sql"
@@ -235,8 +244,8 @@
           "backend": "sql"
         },
         "users": {
-          "ksadmin": {
-            "password": "ksadmin",
+          "admin": {
+            "password": "admin",
             "default_tenant": "admin",
             "roles": {
               "admin": [
@@ -247,21 +256,6 @@
               ],
               "keystone_service_admin": [
                 "admin"
-              ]
-            }
-          },
-          "demo": {
-            "password": "demo",
-            "default_tenant": "demo",
-            "roles": {
-              "sysadmin": [
-                "demo"
-              ],
-              "netadmin": [
-                "demo"
-              ],
-              "member": [
-                "demo"
               ]
             }
           }
@@ -293,7 +287,10 @@
       "mq": {
         "user": "guest",
         "password": "test",
-        "vhost": "/nova"
+        "vhost": "/nova",
+        "network": {
+          "service_type": "rabbitmq"
+        }
       }
     }
   }

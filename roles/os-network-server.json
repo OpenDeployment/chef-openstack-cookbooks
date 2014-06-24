@@ -9,6 +9,7 @@
   "chef_type": "role",
   "run_list": [
     "role[os-base]",
+    "recipe[openstack-network::identity_registration]",
     "recipe[openstack-network::server]"
   ],
   "env_run_lists": {

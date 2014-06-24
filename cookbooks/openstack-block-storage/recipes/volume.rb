@@ -198,6 +198,23 @@ when 'cinder.volume.drivers.lvm.LVMISCSIDriver'
       action :mk_cinder_vol
     end
 
+#    if node['openstack']['block-storage']['volume']['disk'].eql?('loopfile')
+#      template '/etc/init.d/cinder-group-active' do
+#        source 'cinder-group-active.erb'
+#        mode '755'
+#        variables(
+#          volume_name: vg_name,
+#          volume_file: vg_file
+#        )
+#        notifies :start, 'service[cinder-group-active]', :immediately
+#      end
+
+#      service 'cinder-group-active' do
+#        service_name 'cinder-group-active'
+#        action [:enable, :start]
+#      end
+#    end
+
 when 'cinder.volume.drivers.emc.emc_smis_iscsi.EMCSMISISCSIDriver'
   platform_options['cinder_emc_packages'].each do |pkg|
     package pkg do

@@ -226,6 +226,9 @@ slave_compressed_protocol = <%= node['mysql']['tunable']['slave_compressed_proto
 # Read the manual for more InnoDB related options. There are many!
 # You might want to disable InnoDB to shrink the mysqld process by circa 100MB.
 #skip-innodb
+<%- if node["mysql"]["version"].to_f < 5.5 %>
+default-storage-engine = innodb
+<%- end %>
 
 <%- if node["mysql"]["version"].to_f >= 5.5 %>
 innodb_write_io_threads         = <%= node['mysql']['tunable']['innodb_write_io_threads'] %>

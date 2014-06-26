@@ -110,6 +110,12 @@ end
 
 vmware_host_pass = get_secret node['openstack']['compute']['vmware']['secret_name']
 
+# virtualization: '0' hardware support kvm, '1' hardware doesn't
+virtualization = `egrep '(vmx|svm)' --color=always /proc/cpuinfo >/dev/null;echo $?`.delete("\n")
+if virtualization.eql?("1")
+  node.override["openstack"]["compute"]["libvirt"]["virt_type"] = "qemu"
+end
+
 template '/etc/nova/nova.conf' do
   source 'nova.conf.erb'
   owner node['openstack']['compute']['user']

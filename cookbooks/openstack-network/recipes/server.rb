@@ -43,6 +43,7 @@ end
 # else migrate the database to latest version.
 # The node['openstack']['network']['plugin_config_file'] attribute is set in the common.rb recipe
 
+=begin
 bash 'migrate network database' do
   plugin_config_file = node['openstack']['network']['plugin_config_file']
   db_stamp = node['openstack']['network']['db_stamp']
@@ -57,6 +58,7 @@ else
 fi
 EOF
 end
+=end
 
 service 'neutron-server' do
   service_name platform_options['neutron_server_service']

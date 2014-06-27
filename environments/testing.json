@@ -65,8 +65,22 @@
         }
       },
       "network": {
+        "verbose": "True",
+        "debug": "True",
+        "service_plugins": [
+          "router"
+        ],
         "ml2": {
-          "type_drivers": "local,flat,vlan,gre"
+          "type_drivers": "local,flat,vlan,gre",
+          "tenant_network_types": "vlan,gre",
+          "network_vlan_ranges": "physnet1:1000:2999",
+          "enable_security_group": "True"
+        },
+        "openvswitch": {
+          "tenant_network_type": "vlan",
+          "network_vlan_ranges": "physnet1:1000:2999",
+          "bridge_mappings": "physnet1:br-eth1",
+          "fw_driver": "neutron.agent.firewall.NoopFirewallDriver"
         }
       },
       "db": {

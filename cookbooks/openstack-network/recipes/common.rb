@@ -166,10 +166,12 @@ ruby_block 'query service tenant uuid' do
       admin_tenant = node['openstack']['identity']['admin_tenant_name']
       env = openstack_command_env admin_user, admin_tenant
       tenant_id = identity_uuid 'tenant', 'name', 'service', env
-      Chef::Log.error('service tenant UUID for nova_admin_tenant_id not found.') if tenant_id.nil?
+      Chef::Log.error("service tenant UUID tenant_id=#{tenant_id} for nova_admin_tenant_id not found.") if tenant_id.nil?
+      return false if tenant_id.nil?
+      # Chef::Log.error('service tenant UUID for nova_admin_tenant_id not found.') if tenant_id.nil?
       node.set['openstack']['network']['nova']['admin_tenant_id'] = tenant_id
-    rescue RuntimeError => e
-      Chef::Log.error("Could not query service tenant UUID for nova_admin_tenant_id. Error was #{e.message}")
+      # rescue RuntimeError => e
+      # Chef::Log.error("Could not query service tenant UUID for nova_admin_tenant_id. Error was #{e.message}")
     end
   end
   action :run

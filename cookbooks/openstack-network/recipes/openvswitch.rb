@@ -127,6 +127,8 @@ service 'neutron-plugin-openvswitch-agent' do
   end
 end
 
+# the code block should be deleted between =begin and =end
+=begin
 unless ['nicira', 'plumgrid', 'bigswitch'].include?(main_plugin)
   int_bridge = node['openstack']['network']['openvswitch']['integration_bridge']
   execute 'create internal network bridge' do
@@ -148,17 +150,22 @@ unless ['nicira', 'plumgrid', 'bigswitch'].include?(main_plugin)
     notifies :restart, 'service[neutron-plugin-openvswitch-agent]', :delayed
   end
 end
+=end
 
 unless ['nicira', 'plumgrid', 'bigswitch'].include?(main_plugin)
-  unless node['openstack']['network']['openvswitch']['bridge_mapping_interface'].to_s.empty?
-    ext_bridge_mapping = node['openstack']['network']['openvswitch']['bridge_mapping_interface']
-    ext_bridge, ext_bridge_iface = ext_bridge_mapping.split(':')
-    execute 'create data network bridge' do
-      command "ovs-vsctl add-br #{ext_bridge} -- add-port #{ext_bridge} #{ext_bridge_iface}"
-      action :run
-      not_if "ovs-vsctl br-exists #{ext_bridge}"
-      only_if "ip link show #{ext_bridge_iface}"
-      notifies :restart, 'service[neutron-plugin-openvswitch-agent]', :delayed
+  if ['False', 'false'].include?(node["openstack"]["network"]["openvswitch"]["enable_tunneling"]) and \
+     not node['openstack']['network']['openvswitch']['bridge_mappings'].to_s.empty?
+    bridge_mappings = node['openstack']['network']['openvswitch']['bridge_mappings'].split(',')
+    for bridge_mapping in bridge_mappings
+      bridge = bridge_mapping.split(':').last
+      bridge_iface = bridge.split('-').last
+      execute 'create data network bridge' do
+        command "ovs-vsctl add-br #{bridge} -- add-port #{bridge} #{bridge_iface}"
+        action :run
+        not_if "ovs-vsctl br-exists #{bridge}"
+        only_if "ip link show #{bridge_iface}"
+        notifies :restart, 'service[neutron-plugin-openvswitch-agent]', :delayed
+      end
     end
   end
 end

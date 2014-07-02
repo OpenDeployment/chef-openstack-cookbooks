@@ -110,10 +110,14 @@ end
 
 vmware_host_pass = get_secret node['openstack']['compute']['vmware']['secret_name']
 
-# virtualization: '0' hardware support kvm, '1' hardware doesn't
-virtualization = `egrep '(vmx|svm)' --color=always /proc/cpuinfo >/dev/null;echo $?`.delete("\n")
-if virtualization.eql?("1")
-  node.override["openstack"]["compute"]["libvirt"]["virt_type"] = "qemu"
+# qemu: '0' hardware support kvm; '1' server doesn't support kvm, qemu needed
+qemu = `egrep '(vmx|svm)' /proc/cpuinfo >/dev/null;echo $?`.delete("\n")
+if qemu.eql?("1") && node['openstack']['compute']['libvirt']['virt_type'].eql?('kvm')
+  if node['openstack']['compute']['libvirt']['virt_auto']
+    node.override['openstack']['compute']['libvirt']['virt_type'] = 'qemu'
+  else
+    Chef::Log.warn("The host doesn't support #{node['openstack']['compute']['libvirt']['virt_type']}")
+  end
 end
 
 template '/etc/nova/nova.conf' do

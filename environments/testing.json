@@ -120,18 +120,6 @@
         "compute-api-bind": {
           "bind_interface": "eth0"
         },
-        "compute-ec2-admin": {
-          "host": "10.145.88.154",
-          "scheme": "http",
-          "port": "8773",
-          "path": "/services/Admin"
-        },
-        "compute-ec2-api": {
-          "host": "10.145.88.154",
-          "scheme": "http",
-          "port": "8773",
-          "path": "/services/Cloud"
-        },
         "compute-novnc": {
           "host": "10.145.88.154",
           "scheme": "http",
@@ -143,6 +131,9 @@
         },
         "vnc_bind": {
           "bind_interface": "eth0"
+        },
+        "compute-vnc-bind": {
+          "host": "0.0.0.0"
         },
         "image-api": {
           "host": "10.145.88.155",
@@ -159,7 +150,7 @@
           "port": "9191",
           "path": "/v2"
         },
-        "image-registry-bind": {
+        "image-registry": {
           "bind_interface": "eth0"
         },
         "identity-bind": {

@@ -26,10 +26,7 @@
         "api": {
           "ratelimit": "False"
         },
-        "debug": true,
-        "image_api_chef_role": "os-image",
-        "identity_service_chef_role": "os-identity",
-        "rabbit_server_chef_role": "os-ops-messaging"
+        "debug": true
       },
       "dashboard": {
         "use_ssl": "false"
@@ -47,10 +44,6 @@
         "xvpvnc_proxy": {
           "bind_interface": "eth0"
         },
-        "image_api_chef_role": "os-image",
-        "identity_service_chef_role": "os-identity",
-        "nova_setup_chef_role": "os-compute-api",
-        "rabbit_server_chef_role": "os-ops-messaging",
         "ratelimit": {
           "api": {
             "enabled": false
@@ -79,7 +72,7 @@
         "openvswitch": {
           "tenant_network_type": "vlan",
           "network_vlan_ranges": "physnet1:1000:2999",
-          "bridge_mappings": "physnet1:br-eth1",
+          "bridge_mappings": "physnet1:br-eth2",
           "fw_driver": "neutron.agent.firewall.NoopFirewallDriver"
         }
       },
@@ -116,10 +109,10 @@
           "host": "10.145.88.152"
         },
         "mq": {
-          "host": "10.145.88.152"
+          "host": "10.145.88.153"
         },
         "compute-api": {
-          "host": "10.145.88.152",
+          "host": "10.145.88.154",
           "scheme": "http",
           "port": "8774",
           "path": "/v2/%(tenant_id)s"
@@ -128,25 +121,19 @@
           "bind_interface": "eth0"
         },
         "compute-ec2-admin": {
-          "host": "10.145.88.152",
+          "host": "10.145.88.154",
           "scheme": "http",
           "port": "8773",
           "path": "/services/Admin"
         },
         "compute-ec2-api": {
-          "host": "10.145.88.152",
+          "host": "10.145.88.154",
           "scheme": "http",
           "port": "8773",
           "path": "/services/Cloud"
         },
-        "compute-xvpvnc": {
-          "host": "10.145.88.152",
-          "scheme": "http",
-          "port": "6081",
-          "path": "/console"
-        },
         "compute-novnc": {
-          "host": "10.145.88.152",
+          "host": "10.145.88.154",
           "scheme": "http",
           "port": "6080",
           "path": "/vnc_auto.html"
@@ -158,7 +145,7 @@
           "bind_interface": "eth0"
         },
         "image-api": {
-          "host": "10.145.88.152",
+          "host": "10.145.88.155",
           "scheme": "http",
           "port": "9292",
           "path": "/v2"
@@ -167,7 +154,7 @@
           "bind_interface": "eth0"
         },
         "image-registry": {
-          "host": "10.145.88.152",
+          "host": "10.145.88.155",
           "scheme": "http",
           "port": "9191",
           "path": "/v2"
@@ -179,19 +166,19 @@
           "bind_interface": "eth0"
         },
         "identity-api": {
-          "host": "10.145.88.152",
+          "host": "10.145.88.154",
           "scheme": "http",
           "port": "5000",
           "path": "/v2.0"
         },
         "identity-admin": {
-          "host": "10.145.88.152",
+          "host": "10.145.88.154",
           "scheme": "http",
           "port": "35357",
           "path": "/v2.0"
         },
         "block-storage-api": {
-          "host": "10.145.88.152",
+          "host": "10.145.88.154",
           "scheme": "http",
           "port": "8776",
           "path": "/v1/%(tenant_id)s"
@@ -200,13 +187,13 @@
           "bind_interface": "eth0"
         },
         "telemetry-api": {
-          "host": "10.145.88.152",
+          "host": "10.145.88.154",
           "scheme": "http",
           "port": "8777",
           "path": "/v1"
         },
         "network-api": {
-          "host": "10.145.88.152",
+          "host": "10.145.88.154",
           "scheme": "http",
           "port": "9696",
           "path": ""
@@ -218,13 +205,13 @@
           "bind_interface": "eth0"
         },
         "orchestration-api": {
-          "host": "10.145.88.152",
+          "host": "10.145.88.154",
           "scheme": "http",
           "port": "8004",
           "path": "/v1/%(tenant_id)s"
         },
         "orchestration-api-cfn": {
-          "host": "10.145.88.152",
+          "host": "10.145.88.154",
           "scheme": "http",
           "port": "8000",
           "path": "/v1"
@@ -237,22 +224,16 @@
           "backend": "sql"
         },
         "debug": true,
-        "rabbit_server_chef_role": "os-ops-messaging",
         "roles": [
           "admin",
-          "keystone_admin",
-          "keystone_service_admin",
-          "member",
-          "netadmin",
-          "sysadmin"
+          "member"
         ],
         "syslog": {
           "use": false
         },
         "tenants": [
           "admin",
-          "service",
-          "demo"
+          "service"
         ],
         "token": {
           "backend": "sql"
@@ -264,12 +245,6 @@
             "roles": {
               "admin": [
                 "admin"
-              ],
-              "keystone_admin": [
-                "admin"
-              ],
-              "keystone_service_admin": [
-                "admin"
               ]
             }
           }
@@ -280,8 +255,6 @@
           "bind_interface": "eth0"
         },
         "debug": true,
-        "identity_service_chef_role": "os-identity",
-        "rabbit_server_chef_role": "os-ops-messaging",
         "registry": {
           "bind_interface": "eth0"
         },
@@ -296,7 +269,7 @@
         ]
       },
       "memcached_servers": [
-        "10.145.88.152:11211"
+        "10.145.88.154:11211"
       ],
       "mq": {
         "user": "guest",

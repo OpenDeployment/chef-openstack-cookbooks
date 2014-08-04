@@ -127,9 +127,12 @@ service 'neutron-plugin-openvswitch-agent' do
   end
 end
 
-# the code block should be deleted between =begin and =end
-=begin
+execute "chkconfig openvswitch on" do
+  only_if {platform?(%w(fedora redhat centos))}
+end
+
 unless ['nicira', 'plumgrid', 'bigswitch'].include?(main_plugin)
+  # create internal network bridge
   int_bridge = node['openstack']['network']['openvswitch']['integration_bridge']
   execute 'create internal network bridge' do
     ignore_failure true
@@ -138,22 +141,38 @@ unless ['nicira', 'plumgrid', 'bigswitch'].include?(main_plugin)
     not_if "ovs-vsctl br-exists #{int_bridge}"
     notifies :restart, 'service[neutron-plugin-openvswitch-agent]', :delayed
   end
-end
+  
+  # create tenant network bridge
+  case node['openstack']['network']['openvswitch']['tenant_network_type']
+    when 'gre'
+      bridge = node['openstack']['network']['openvswitch']['tunnel_bridge']
+      cmd = "ovs-vsctl --may-exist add-br #{bridge}"
 
-unless ['nicira', 'plumgrid', 'bigswitch'].include?(main_plugin)
-  tun_bridge = node['openstack']['network']['openvswitch']['tunnel_bridge']
-  execute 'create tunnel network bridge' do
-    ignore_failure true
-    command "ovs-vsctl add-br #{tun_bridge}"
-    action :run
-    not_if "ovs-vsctl br-exists #{tun_bridge}"
-    notifies :restart, 'service[neutron-plugin-openvswitch-agent]', :delayed
+    when 'vlan'
+      bridge_mappings = node['openstack']['network']['openvswitch']['bridge_mappings']
+      bridge = bridge_mappings.split(":").map(&:strip).reject(&:empty?)[1]
+      interface = bridge.split("-").map(&:strip).reject(&:empty?)[1]
+      cmd = "ovs-vsctl --may-exist add-br #{bridge};\
+             ovs-vsctl --may-exist add-port #{bridge} #{interface}"
+
+    else
+      # "TODO"
+      print "The tenant_network_type is not suppported/n"
+  end
+  if defined?(cmd)
+    execute "create tenant network bridge" do
+      ignore_failure true
+      command cmd
+      action :run
+      not_if "ovs-vsctl brexists #{bridge}"
+      notifies :restart, "service[neutron-plugin-openvswitch-agent]", :delayed
+    end
   end
 end
-=end
 
+=begin
 unless ['nicira', 'plumgrid', 'bigswitch'].include?(main_plugin)
-  if ['False', 'false'].include?(node["openstack"]["network"]["openvswitch"]["enable_tunneling"]) and \
+  if ['False', 'false'].include?(node['openstack']['network']['openvswitch']['enable_tunneling']) and \
      not node['openstack']['network']['openvswitch']['bridge_mappings'].to_s.empty?
     bridge_mappings = node['openstack']['network']['openvswitch']['bridge_mappings'].split(',')
     for bridge_mapping in bridge_mappings
@@ -169,9 +188,9 @@ unless ['nicira', 'plumgrid', 'bigswitch'].include?(main_plugin)
     end
   end
 end
+=end
 
 if node['openstack']['network']['disable_offload']
-
   package 'ethtool' do
     action :upgrade
     options platform_options['package_overrides']

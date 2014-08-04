@@ -206,7 +206,7 @@ default['openstack']['block-storage']['volume']['volumes_dir'] = '/var/lib/cinde
 default['openstack']['block-storage']['volume']['driver'] = 'cinder.volume.drivers.lvm.LVMISCSIDriver'
 default['openstack']['block-storage']['volume']['volume_group'] = 'cinder-volumes'
 default['openstack']['block-storage']['volume']['volume_group_size'] = 40
-default['openstack']['block-storage']['volume']['volume_clear_size'] = 0
+default['openstack']['block-storage']['volume']['volume_clear_size'] = 10
 default['openstack']['block-storage']['volume']['volume_clear'] = 'zero'
 # volume disk can be loopfile or /dev/sdb
 default['openstack']['block-storage']['volume']['disk'] = 'loopfile'

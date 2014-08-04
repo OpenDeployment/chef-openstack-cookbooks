@@ -417,7 +417,8 @@ default['openstack']['compute']['misc_paste'] = nil
 
 # To disable the EC2 API endpoint, simply remove 'ec2,' from the list
 # of enabled API services.
-default['openstack']['compute']['enabled_apis'] = 'ec2,osapi_compute,metadata'
+#default['openstack']['compute']['enabled_apis'] = 'ec2,osapi_compute,metadata'
+default['openstack']['compute']['enabled_apis'] = 'osapi_compute'
 
 # VMware driver
 default['openstack']['compute']['vmware']['secret_name'] = 'openstack_vmware_secret_name'

@@ -47,11 +47,6 @@ node['haproxy']['services'].each do |name, service|
     # load balancer may be in the pool
     pool_members << node if node.run_list.roles.include?(service[:role])
   end
-  print "\n++++++++++++++++++++\n"
-  print "\nnode['haproxy']['enabled_services']=#{node['haproxy']['enabled_services']}\n"
-  print "node['haproxy']['roles']=#{node['haproxy']['roles']}\n"
-  print "name=#{name}, \nservice=#{service}, \npool_members=#{pool_members}"
-  print "\n++++++++++++++++++++\n"
 
   # we prefer connecting via local_ipv4 if
   # pool members are in the same cloud

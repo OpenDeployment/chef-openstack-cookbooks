@@ -19,23 +19,7 @@
       "status": "disable"
     },
     "haproxy": {
-      "incoming_address": "10.145.88.160",
-      "roles": {
-        "os-controller": [
-          "dashboard_http",
-          "dashboard_https",
-          "keystone_admin",
-          "keystone_public_internal",
-          "nova_ec2_api",
-          "nova_compute_api",
-          "cinder_api",
-          "neutron_api",
-          "novncproxy"
-        ],
-        "os-image": [
-          "glance_api"
-        ]
-      }
+      "incoming_address": "10.145.88.163"
     },
     "keepalived": {
       "vip": {

@@ -106,6 +106,13 @@ if node['openstack']['auth']['strategy'] == 'pki'
     mode  00750
   end
 
+  nodes = search(:node, "role:os-identity NOT name:#{node.name}")
+  print "\n+++++++++++++++++++++\n"
+  print "node name: #{node.name}\n"
+  print "node list: #{nodes}\n"
+  print "node environment: #{node.environment}\n"
+  print "\n+++++++++++++++++++++\n"
+
   if certfile_url.nil? || keyfile_url.nil? || ca_certs_url.nil?
     execute 'keystone-manage pki_setup' do
       user  node['openstack']['identity']['user']

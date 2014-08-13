@@ -129,7 +129,7 @@ template '/etc/nova/nova.conf' do
     xvpvncproxy_bind_port: xvpvnc_bind.port,
     novncproxy_bind_host: novnc_bind.host,
     novncproxy_bind_port: novnc_bind.port,
-    vncserver_listen: vnc_bind.host,
+    vncserver_listen: node['openstack']['compute']['vnc']['vncserver_listen'],
     vncserver_proxyclient_address: vnc_bind.host,
     memcache_servers: memcache_servers,
     mq_service_type: mq_service_type,

@@ -16,31 +16,42 @@
       "root_network_acl": "%"
     },
     "ha": {
-      "status": "disable"
-    },
-    "haproxy": {
-      "incoming_address": "10.145.88.160",
-      "roles": {
-        "os-controller": [
-          "dashboard_http",
-          "dashboard_https",
-          "keystone_admin",
-          "keystone_public_internal",
-          "nova_ec2_api",
-          "nova_compute_api",
-          "cinder_api",
-          "neutron_api",
-          "novncproxy"
+      "status": "disable",
+      "haproxy": {
+        "vip": "10.145.88.160",
+        "roles": {
+          "os-controller": [
+            "dashboard_http",
+            "dashboard_https",
+            "keystone_admin",
+            "keystone_public_internal",
+            "nova_ec2_api",
+            "nova_compute_api",
+            "cinder_api",
+            "neutron_api",
+            "novncproxy"
+          ],
+          "os-image": [
+            "glance_api"
+          ]
+        }
+      },
+      "keepalived": {
+        "router_id_prefix": "lsb",
+        "default_priority": 100,
+        "default_state": "SLAVE",
+        "states_to_assign": [
+          "MASTER"
         ],
-        "os-image": [
-          "glance_api"
-        ]
-      }
-    },
-    "keepalived": {
-      "vip": {
-        "ipaddress": "10.145.88.163",
-        "interface": "eth1"
+        "router_ids": {
+        },
+        "instance_name": {
+          "vip": "",
+          "priorities": {
+          },
+          "states": {
+          }
+        }
       }
     },
     "openstack": {

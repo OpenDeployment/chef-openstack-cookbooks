@@ -217,6 +217,8 @@ default['openstack']['compute']['libvirt']['images_rbd_ceph_conf'] = '/etc/ceph/
 default['openstack']['compute']['libvirt']['volume_backend'] = nil
 default['openstack']['compute']['libvirt']['rbd']['rbd_secret_name'] = 'rbd_secret_uuid'
 default['openstack']['compute']['libvirt']['rbd']['rbd_user'] = 'cinder'
+default['openstack']['compute']['libvirt']['host_uuid'] = nil
+
 default['openstack']['compute']['config']['availability_zone'] = 'nova'
 default['openstack']['compute']['config']['storage_availability_zone'] = 'nova'
 default['openstack']['compute']['config']['default_schedule_zone'] = 'nova'
@@ -294,6 +296,9 @@ else
   default['openstack']['compute']['config']['instance_usage_audit_period'] = 'month'
   default['openstack']['compute']['config']['notify_on_state_change'] = ''
 end
+
+# vncproxy setttings
+default['openstack']['compute']['vnc']['vncserver_listen'] = '0.0.0.0'
 
 # Keystone settings
 default['openstack']['compute']['api']['auth_strategy'] = 'keystone'

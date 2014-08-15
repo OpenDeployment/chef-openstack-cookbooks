@@ -106,20 +106,42 @@ if node['openstack']['auth']['strategy'] == 'pki'
     mode  00750
   end
 
-  nodes = search(:node, "role:os-identity NOT name:#{node.name}")
-  print "\n+++++++++++++++++++++\n"
-  print "node name: #{node.name}\n"
-  print "node list: #{nodes}\n"
-  print "node environment: #{node.environment}\n"
-  print "\n+++++++++++++++++++++\n"
-
   if certfile_url.nil? || keyfile_url.nil? || ca_certs_url.nil?
-    execute 'keystone-manage pki_setup' do
-      user  node['openstack']['identity']['user']
-      group node['openstack']['identity']['group']
+    keygen_node = node_election('os-identity', 'keystone_keygen')
+    if node.name.eql?(keygen_node.name)
+      execute 'keystone-manage pki_setup' do
+        user  node['openstack']['identity']['user']
+        group node['openstack']['identity']['group']
+        not_if { ::FileTest.exists? node['openstack']['identity']['signing']['keyfile'] }
+      end
+      %w{certfile keyfile ca_certs}.each do |name|
+        ruby_block "read #{name}" do
+          block do
+            file = node['openstack']['identity']['signing']["#{name}"]
+            if File.exists?(file) and !node['openstack']['identity']['signing'].attribute?("#{name}_data")
+              node.set['openstack']['identity']['signing']["#{name}_data"] = File.read(file)
+              node.save
+            end
+          end
+        end
+      end
 
-      not_if { ::FileTest.exists? node['openstack']['identity']['signing']['keyfile'] }
+    else
+      %w{certfile keyfile ca_certs}.each do |name|
+        if !keygen_node['openstack']['identity']['signing'].attribute?("#{name}_data")
+          Chef::Log.debug \
+            "Chef-client exit for PKI files from node #{keygen_node.name})"
+          exit 1
+        end
+        file node['openstack']['identity']['signing']["#{name}"] do
+          content keygen_node['openstack']['identity']['signing']["#{name}_data"]
+          owner   node['openstack']['identity']['user']
+          group   node['openstack']['identity']['group']
+          mode    00640
+        end
+      end
     end
+
   else
     remote_file node['openstack']['identity']['signing']['certfile'] do
       source certfile_url

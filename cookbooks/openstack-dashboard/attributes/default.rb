@@ -35,7 +35,7 @@ default['openstack']['dashboard']['keystone_default_role'] = '_member_'
 default['openstack']['dashboard']['keystone_service_chef_role'] = 'keystone'
 
 default['openstack']['dashboard']['server_hostname'] = nil
-default['openstack']['dashboard']['use_ssl'] = true
+default['openstack']['dashboard']['use_ssl'] = false
 default['openstack']['dashboard']['ssl']['cert_url'] = nil
 default['openstack']['dashboard']['ssl']['key_url'] = nil
 # When using a remote certificate and key, the names of the actual installed certificate

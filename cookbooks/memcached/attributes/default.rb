@@ -17,12 +17,13 @@
 # limitations under the License.
 #
 
-default['memcached']['memory'] = 256
+default['memcached']['memory'] = `free -m | grep Mem: | awk '{print $2}'`.delete("\n").to_i/3 < 8196 ? 256 : 8196
 default['memcached']['port'] = 11211
 default['memcached']['udp_port'] = 11211
 default['memcached']['listen'] = '0.0.0.0'
+default['memcached']['bind_interface'] = nil
 default['memcached']['maxconn'] = 2048
-default['memcached']['max_object_size'] = '1m'
+default['memcached']['max_object_size'] = '2m'
 default['memcached']['logfilename'] = 'memcached.log'
 
 case node['platform_family']

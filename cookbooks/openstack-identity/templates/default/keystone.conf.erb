@@ -30,7 +30,7 @@ rpc_backend=<%= node["openstack"]["identity"]["rpc_backend"] %>
 <% end %>
 <% end %>
 
-<% if @memcache_servers -%>
+<% if node['openstack']['identity']['token']['backend'].eql?('memcache') -%>
 [memcache]
 servers = <%= @memcache_servers %>
 

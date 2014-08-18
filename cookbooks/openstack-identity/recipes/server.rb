@@ -192,7 +192,12 @@ bind_address = bind_endpoint.host
 # If the search role is set, we search for memcache
 # servers via a Chef search. If not, we look at the
 # memcache.servers attribute.
-memcache_servers = memcached_servers.join ','  # from openstack-common lib
+if node['openstack']['identity']['token']['backend'].eql?('memcache')
+  memcache_servers = memcached_servers('os-ops-caching').join ','  # from openstack-common lib
+  # number of seconds to wait before sockets timeout when the memcached server is down
+  # the default number is 3, here is going to set it as 0.1
+  `sed -i "s/_SOCKET_TIMEOUT = 3/_SOCKET_TIMEOUT = 0.1/g" /usr/lib/python[0-9].[0-9]/site-packages/memcache.py`
+end
 
 # These configuration endpoints must not have the path (v2.0, etc)
 # added to them, as these values are used in returning the version

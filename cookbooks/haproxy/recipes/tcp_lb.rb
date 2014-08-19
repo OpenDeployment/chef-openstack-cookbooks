@@ -46,6 +46,7 @@ node['haproxy']['services'].each do |name, service|
     pool_members = search(:node, "run_list:role\\[#{service['role']}\\] AND chef_environment:#{node.chef_environment}") || []
     # load balancer may be in the pool
     pool_members << node if node.run_list.roles.include?(service[:role])
+    pool_members = pool_members.sort_by { |node| node.name } unless pool_members.empty?
   end
 
   # we prefer connecting via local_ipv4 if

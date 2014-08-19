@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-default['memcached']['memory'] = `free -m | grep Mem: | awk '{print $2}'`.delete("\n").to_i/3 < 8196 ? 256 : 8196
+default['memcached']['memory'] = (node['memory']['total'].to_i/1024/3) < 8196 ? node['memory']['total'].to_i/1024/3 : 8196
 default['memcached']['port'] = 11211
 default['memcached']['udp_port'] = 11211
 default['memcached']['listen'] = '0.0.0.0'

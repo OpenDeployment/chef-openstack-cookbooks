@@ -1,13 +1,12 @@
 global
-  #log 127.0.0.1   local0
-  log 127.0.0.1   local4 notice
-  log 127.0.0.1   local4 info
+  log 127.0.0.1   <%= node['haproxy']['log']['facilities'] -%> notice
+  log 127.0.0.1   <%= node['haproxy']['log']['facilities'] -%> info
   log-send-hostname
   daemon
   maxconn <%= node['haproxy']['global_max_connections'] %>
   #debug
   #quiet
-  spread-checks     5
+  spread-checks 5
   user <%= node['haproxy']['user'] %>
   group <%= node['haproxy']['group'] %>
 <% if node['haproxy']['enable_stats_socket'] -%>

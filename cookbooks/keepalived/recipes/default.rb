@@ -66,7 +66,6 @@ if node['keepalived']['shared_address']
       block do
         fe = Chef::Util::FileEdit.new('/etc/sysctl.conf')
         fe.search_file_delete_line(/^net.ipv4.ip_nonlocal_bind\s*=\s*0/)
-        fe.write_file
         fe.insert_line_if_no_match(/^net.ipv4.ip_nonlocal_bind\s*=s*1/,
                                    "net.ipv4.ip_nonlocal_bind = 1")
         fe.write_file

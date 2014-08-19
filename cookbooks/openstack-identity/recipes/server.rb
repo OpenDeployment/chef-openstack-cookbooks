@@ -127,17 +127,14 @@ if node['openstack']['auth']['strategy'] == 'pki'
       end
 
     else
-      %w{certfile keyfile ca_certs}.each do |name|
-        if !keygen_node['openstack']['identity']['signing'].attribute?("#{name}_data")
-          Chef::Log.debug \
-            "Chef-client exit for PKI files from node #{keygen_node.name})"
-          exit 1
-        end
-        file node['openstack']['identity']['signing']["#{name}"] do
-          content keygen_node['openstack']['identity']['signing']["#{name}_data"]
-          owner   node['openstack']['identity']['user']
-          group   node['openstack']['identity']['group']
-          mode    00640
+      if keygen_node['openstack']['identity']['signing'].attribute?("#{name}_data")
+        %w{certfile keyfile ca_certs}.each do |name|
+          file node['openstack']['identity']['signing']["#{name}"] do
+            content keygen_node['openstack']['identity']['signing']["#{name}_data"]
+            owner   node['openstack']['identity']['user']
+            group   node['openstack']['identity']['group']
+            mode    00640
+          end
         end
       end
     end

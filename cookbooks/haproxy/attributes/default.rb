@@ -22,6 +22,8 @@
 # 'node_mapping'; 'prefeed' is suitable for stable and independent services
 # if 'autofeed', services' backend info will automaticly learn backend info
 # from its chef server.
+default['haproxy']['log']['facilities'] = 'local4'
+default['haproxy']['log']['file'] = '/var/log/haproxy.log'
 default['haproxy']['choose_backend'] = 'autofeed'
 default['haproxy']['enable_default_http'] = true
 default['haproxy']['incoming_address'] = "0.0.0.0"
@@ -31,7 +33,8 @@ default['haproxy']['members'] = [{
   "ipaddress" => "127.0.0.1",
   "port" => 4000,
   "ssl_port" => 4000
-}, {
+},
+{
   "hostname" => "localhost",
   "ipaddress" => "127.0.0.1",
   "port" => 4001,
@@ -97,7 +100,7 @@ default['haproxy']['enabled_services'] = [
   "nova_compute_api",
   "novncproxy",
   "cinder_api",
-  "neutron_api" 
+  "neutron_api"
 ]
 
 default['haproxy']['roles'] = {

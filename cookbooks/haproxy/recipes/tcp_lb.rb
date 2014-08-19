@@ -78,7 +78,7 @@ node['haproxy']['services'].each do |name, service|
     if name.eql?("novncproxy")
       "#{s[:hostname]} #{s[:ipaddress]}:#{service[:backend_port]}"
     else
-      "#{s[:hostname]} #{s[:ipaddress]}:#{service[:backend_port]} check inter 2000 rise 2 fall 5"
+      "#{s[:hostname]} #{s[:ipaddress]}:#{service[:backend_port]} check inter 20000 rise 2 fall 5"
     end
   end
 
@@ -117,4 +117,31 @@ end
 service "haproxy" do
   supports :restart => true, :status => true, :reload => true
   action [:enable, :start]
+end
+
+# Enable haproxy log to file
+service "rsyslog" do
+  supports :status => true, :restart => true, :start => true, :stop => true
+  action :nothing
+end
+
+ruby_block "enable haproxy log" do
+  block do
+    fe = Chef::Util::FileEdit.new('/etc/rsyslog.conf')
+    fe.search_file_replace_line(/^\#\$ModLoad\s+imudp/, '$ModLoad imudp')
+    fe.write_file
+    fe.search_file_replace_line(/^\#\$UDPServerRun\s+514/, '$UDPServerRun 514')
+    fe.write_file
+    fe.search_file_replace_line(/^\*.emerg\s+\*/, "#*.emerg        *")
+    fe.write_file
+    haproxylog = "#{node['haproxy']['log']['facilities']}.*  \
+                  #{node['haproxy']['log']['file']}"
+    if !::File.readlines('/etc/rsyslog.conf').grep(/#{haproxylog}/).any?
+      fe.insert_line_after_match('^local7.*', haproxylog)
+      fe.write_file
+    end
+  end
+  action :nothing
+  subscribes :run, "template[#{node['haproxy']['conf_dir']}/haproxy.cfg]", :immediately
+  notifies :restart, "service[rsyslog]", :delayed
 end

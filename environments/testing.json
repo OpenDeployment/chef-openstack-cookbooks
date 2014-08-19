@@ -103,12 +103,6 @@
         },
         "dashboard": {
           "host": "10.145.88.154"
-        },
-        "telemetry": {
-          "host": "10.145.88.154"
-        },
-        "orchestration": {
-          "host": "10.145.88.154"
         }
       },
       "developer_mode": true,
@@ -208,18 +202,6 @@
         },
         "network-openvswitch": {
           "bind_interface": "eth1"
-        },
-        "orchestration-api": {
-          "host": "10.145.88.163",
-          "scheme": "http",
-          "port": "8004",
-          "path": "/v1/%(tenant_id)s"
-        },
-        "orchestration-api-cfn": {
-          "host": "10.145.88.163",
-          "scheme": "http",
-          "port": "8000",
-          "path": "/v1"
         }
       },
       "identity": {

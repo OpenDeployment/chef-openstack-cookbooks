@@ -178,12 +178,12 @@ execute 'Deleting default libvirt network' do
   only_if 'virsh net-list | grep -q default'
 end
 
-# use bios system-uuid as host uuid
+# Host uuid
 if node['openstack']['compute']['libvirt']['host_uuid'].nil?
   ruby_block "set host uuid" do
     block do
-      system_uuid = `uuidgen`.delete("\n")
-      node.set['openstack']['compute']['libvirt']['host_uuid'] = system_uuid
+      new_uuid = `uuidgen`.delete("\n")
+      node.set['openstack']['compute']['libvirt']['host_uuid'] = new_uuid
     end
   end
 end

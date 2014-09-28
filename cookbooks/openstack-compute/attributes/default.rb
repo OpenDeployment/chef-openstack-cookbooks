@@ -361,7 +361,7 @@ when 'fedora', 'rhel', 'suse' # :pragma-foodcritic: ~FC024 - won't fix this
     'compute_vncproxy_service' => 'openstack-nova-novncproxy',
     'compute_vncproxy_consoleauth_packages' => ['openstack-nova-console'],
     'compute_vncproxy_consoleauth_service' => 'openstack-nova-consoleauth',
-    'libvirt_packages' => ['libvirt','dmidecode'],
+    'libvirt_packages' => ['libvirt', 'dmidecode'],
     'libvirt_service' => 'libvirtd',
     'libvirt_ceph_packages' => [],
     'dbus_service' => 'messagebus',

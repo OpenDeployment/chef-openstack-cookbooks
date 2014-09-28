@@ -1,0 +1,40 @@
+To integrate openstack with ceph in openstack HA mode. Take 12 nodes for example
+1 Role distribure
+   a. harpoxy: node1,node2
+   b. db,mq: node3
+   c. controller: node4,node5,node6
+   d. compute: node7,node8,node9
+   e. ceph: node10,node11,node12
+
+2 Config the environment(openstack and ceph integration part)
+   a. config the ceph side
+      i.set "keystone environment" to your openstack cluster environment.
+      ii.set "radosgw domain" to a hostname ,which installing radosgw.
+      iii.set "is_keystone_integration" to false at first,when the ceph cluster is installed correctly,you can change it to true. Otherwise your ceph cluster maybe interrupted because of the openstack keystone service not ready.
+      iv. config other setting,look into ceph.txt in the folder
+
+   b.config the cinder backend to ceph
+      i.set the openstack.block-storage.volume.driver to cinder.volume.drivers.rbd.RBDDriver. If you don't want to config the cinder backend to ceph,just delete the volume.driver setting.
+
+   c.config the glance backend to ceph
+      i.set image.api.default_store to rbd. If you don't want to config the glance backend to ceph, just delete the default_store setting.
+
+   d.config the nova image backend to ceph
+      i.set compute.libvirt.images_type to rbd. If you don't want to config the nova image backend to ceph, just delete the images_type setting.
+
+
+3 Set run list
+   node1: "role[os-ha], role[os-network-worker]"
+   node2: "role[os-ha], role[os-network-worker]"
+   node3: "role[os-ops-database], role[os-ops-messaging]"
+   node4: "role[os-identity], role[os-dashboard], role[os-image], role[os-compute-controller], role[os-network-server], role[os-block-storage-controller], role[os-block-storage-volume], recipe[openstack-block-storage::cinder-config-ceph], recipe[openstack-image::glance-config-ceph], recipe[openstack-object-storage::swift-config-ceph], recipe[openstack-object-storage::swiftclient-patch]"
+   node5: "role[os-identity], role[os-dashboard], role[os-image], role[os-compute-controller], role[os-network-server], role[os-block-storage-controller], role[os-block-storage-volume], recipe[openstack-block-storage::cinder-config-ceph], recipe[openstack-image::glance-config-ceph], recipe[openstack-object-storage::swift-config-ceph], recipe[openstack-object-storage::swiftclient-patch]"
+   node6: "role[os-identity], role[os-dashboard], role[os-image], role[os-compute-controller], role[os-network-server], role[os-block-storage-controller], role[os-block-storage-volume], recipe[openstack-block-storage::cinder-config-ceph], recipe[openstack-image::glance-config-ceph], recipe[openstack-object-storage::swift-config-ceph], recipe[openstack-object-storage::swiftclient-patch]"
+   node7: "role[os-compute-worker], recipe[openstack-compute::compute-config-ceph]"
+   node8: "role[os-compute-worker], recipe[openstack-compute::compute-config-ceph]"
+   node9: "role[os-compute-worker], recipe[openstack-compute::compute-config-ceph]"
+   node10: "role[ceph-mon], role[ceph-osd], role[ceph-radosgw], recipe[ceph::openstack_config_mon], recipe[ceph::openstack_config_radosgw]"
+   node11: "role[ceph-mon], role[ceph-osd],recipe[ceph::openstack_config_mon]"
+   node12: "role[ceph-mon], role[ceph-osd],recipe[ceph::openstack_config_mon]"
+
+4 Run chef-client on each node

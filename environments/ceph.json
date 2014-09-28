@@ -1,0 +1,51 @@
+{
+  "name": "ceph",
+  "description": "",
+  "cookbook_versions": {
+    "ceph": "~> 0.2.1"
+  },
+  "json_class": "Chef::Environment",
+  "chef_type": "environment",
+  "default_attributes": {
+    "ceph": {
+      "keystone environment": "openstack-ceph",
+      "config": {
+        "fsid": "71fc3205-ce61-4e2e-b7f9-05fd59f8c6dd",
+        "global": {
+          "public network": "10.1.0.0/16",
+          "cluser network": "10.2.0.0/16",
+          "osd pool default pg num": "1024",
+          "osd pool default pgp num": "1024",
+          "osd pool default size": "3",
+          "max open files": "131072"
+        },
+        "osd": {
+          "osd journal size": "10000",
+          "osd mkfs type": "xfs",
+          "osd mount options xfs": "rw,noatime,inode64,logbsize=256k,delaylog",
+          "osd mkfs options xfs": "-f -i size=2048",
+          "filestore max inline xattr size": "254",
+          "filestore max inline xattrs": "6",
+          "osd_op_threads": "20",
+          "filestore_queue_max_ops": "500",
+          "filestore_queue_committing_max_ops": "5000",
+          "journal_max_write_entries": "1000",
+          "journal_queue_max_ops": "3000",
+          "objecter_inflight_ops": "10240",
+          "filestore_queue_max_bytes": "1048576000",
+          "filestore_queue_committing_max_bytes": "1048576000",
+          "journal_max_write_bytes": "1048576000",
+          "journal_queue_max_bytes": "1048576000",
+          "ms_dispatch_throttle_bytes": "1048576000",
+          "objecter_infilght_op_bytes": "1048576000",
+          "filestore_max_sync_interval": "10",
+          "filestore_flusher": "false",
+          "filestore_flush_min": "0",
+          "filestore_sync_flush": true
+        }
+      }
+    }
+  },
+  "override_attributes": {
+  }
+}

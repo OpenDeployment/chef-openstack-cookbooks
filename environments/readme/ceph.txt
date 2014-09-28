@@ -1,0 +1,17 @@
+To setup a ceph cluster with 3 mons 7 osds 1 radosgw:
+1 Change config in the environment
+   a. set a fsid to the cluster using uuidgen command
+   b. change the "public network","cluster network" in environment
+   c. change the "osd pool default pg num" "osd pool default pgp num", the cluster has a better peformance when it's set to (osd number)*100
+   d. change the "osd journal size", the number is measured in MB, you can set it simply to 10000. but is should be smaller than the disk capacity
+
+2 Set the server run list
+   server1: "role[ceph-mon],role[ceph-osd],ceph[ceph-radosgw]"
+   server1: "role[ceph-mon],role[ceph-osd]"
+   server1: "role[ceph-mon],role[ceph-osd]"
+   server1: "role[ceph-osd]"
+   server1: "role[ceph-osd]"
+   server1: "role[ceph-osd]"
+   server1: "role[ceph-osd]"
+
+3 Run chef-client on each server

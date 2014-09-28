@@ -79,7 +79,7 @@ node['haproxy']['services'].each do |name, service|
     if name.eql?("novncproxy")
       "#{s[:hostname]} #{s[:ipaddress]}:#{service[:backend_port]}"
     else
-      "#{s[:hostname]} #{s[:ipaddress]}:#{service[:backend_port]} check inter 20000 rise 2 fall 5"
+      "#{s[:hostname]} #{s[:ipaddress]}:#{service[:backend_port]} check inter 30000 fastinter 1000 rise 2 fall 5"
     end
   end
 

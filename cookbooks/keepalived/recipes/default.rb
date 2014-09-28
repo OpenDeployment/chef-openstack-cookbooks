@@ -19,17 +19,25 @@
 
 require 'chef/util/file_edit'
 
+# The following code block is trying to automaticly elect master node
+# however it is not polished very well, currently only support two keepalived
+# nodes. If you are going to build a keepalived cluster with 3 and up nodes,
+# either poilish it or use your own recipe to handle the situation.
 master_node = keepalived_master('os-ha', 'keepalived_default_master')
 instance = node.set['keepalived']['instances']['openstack']
 router_ids = node.set['keepalived']['global']['router_ids']
 if node.name.eql?(master_node.name)
-  router_ids["#{node.name}"] = 'lsb01'
-  instance['priorities']["#{node.name}"] = '110'
-  instance['states']["#{node.name}"] = 'MASTER'
+  if instance['states']["#{node.name}"].empty?
+    router_ids["#{node.name}"] = 'lsb01'
+    instance['priorities']["#{node.name}"] = '110'
+    instance['states']["#{node.name}"] = 'MASTER'
+  end
 else
-  router_ids["#{node.name}"] = 'lsb02'
-  instance['priorities']["#{node.name}"] = '101'
-  instance['states']["#{node.name}"] = 'BACKUP'
+  if instance['states']["#{node.name}"].empty?
+    router_ids["#{node.name}"] = 'lsb02'
+    instance['priorities']["#{node.name}"] = '101'
+    instance['states']["#{node.name}"] = 'BACKUP'
+  end
 end
 
 case node["platform_family"]

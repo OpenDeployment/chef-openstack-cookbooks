@@ -26,12 +26,16 @@ def node_election(role, tag, chef_environment = nil)
   if master.empty?
     nodes = search(:node, "run_list:role\\[#{role}\\] AND \
                    chef_environment:#{chef_environment}") || []
-    nodes = nodes.sort_by { |node| node.name } unless nodes.empty?
-    if node.name.eql?(nodes.first.name)
-      node.tags << tag unless node.tags.include?(tag)
-      node.save
+    if nodes.empty?
+      return []
+    else
+      nodes = nodes.sort_by { |node| node.name }
+      if node.name.eql?(nodes.first.name)
+        node.tags << tag unless node.tags.include?(tag)
+        node.save
+      end
+      return nodes.first
     end
-    return nodes.first
   else
     return master.first
   end

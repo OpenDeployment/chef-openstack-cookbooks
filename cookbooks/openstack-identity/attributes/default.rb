@@ -48,8 +48,8 @@ default['openstack']['identity']['syslog']['config_facility'] = 'local2'
 
 # RPC attributes
 default['openstack']['identity']['control_exchange'] = 'openstack'
-default['openstack']['identity']['rpc_thread_pool_size'] = 64
-default['openstack']['identity']['rpc_conn_pool_size'] = 30
+default['openstack']['identity']['rpc_thread_pool_size'] = 240
+default['openstack']['identity']['rpc_conn_pool_size'] = 100
 default['openstack']['identity']['rpc_response_timeout'] = 60
 case node['openstack']['mq']['service_type']
 when 'rabbitmq'
